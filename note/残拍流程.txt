@@ -1,0 +1,46 @@
+手机端正常的审核流程是（不考虑回退）：
+保险公司理赔发起询价→保险公司审核员审核通过→拍卖商报价→保险公司理赔系统发起委托拍卖→保险公司审核员审核通过→拍卖商确认取车→拍卖商确认拍卖（反馈拍卖价格）→拍卖商确认过户
+
+1.保险公司理赔发起询价→
+调我方接口RequestNewVehicleInquiry,根据车牌或车架查询carinfo是否有有效的数据，无则添加有效的待审核一询数据，有则添加有效待审二询数据并将之前的数据改为无效
+然后根据车辆停放地推送询价审核至相应的审核员审核
+这时对应审核员待审核列表会有对应的车辆审核信息（可选通过和驳回）
+2.保险公司审核员审核通过→/sale/auditor/auditPassOrNoPass
+选择通过：将车辆信息中状态status改为审核通过，在T_CAR_WORK_FLOW中记录此次操作审核通过，这时车辆审核类型是车辆询价或车辆二询，推送车辆信息至残拍商，并且通知理赔系统审核通过
+选择驳回：将车辆信息中状态status改为审核未通过，在T_CAR_WORK_FLOW中记录此次操作审核未通过与原因，并通知理赔系统不通过，理赔可再次发起询价。
+通过后会在残拍商拍卖中心显示该车辆信息，点击查看详细信息与出价
+3.拍卖商报价→/sale/auctioneer/bid
+出价后将出价信息保存到T_BID_PRICE出价表与T_TRADE最新出价表
+定时任务每两小时扫描一次询价超过24小时的，将所有出价信息推送给理赔系统 T_CAR_WORK_FLOW的status改为已经通知理赔系统
+4.保险公司理赔系统发起委托拍卖→/api/set_vehicle_result
+理赔可根据出价结果出现三种处置结果，送维修，二次报价、推全拍卖，将处置结果推送给我们，在T_SET_VEHICLE_RESULT添加一条处置结果，将carinfo的审核类型改为车辆处置结果审核
+并将车辆信息推送给审核员审核
+二次询价会再往carinfo插入一条有效待审二询数据，
+5.保险公司审核员审核通过→/sale/auditor/auditPassOrNoPass
+审核员可对这三种结果进行审核
+通过：将carinfo的status改为结束
+	推全拍卖：将T_TRADE的WinBid改为1，将update_time改为当前时间，表示已中标和中标时间，并将拍卖结果推送给残拍商
+	二次报价：将之前的车辆信息改为无效并插入一条相同的数据，时间改为当前时间，状态改为审核通过，审核类型改为第二次询价，并添加一条审核通过的工作流数据，然后通知残拍商询价
+	送维修：将车辆信息改为无效，并通知残拍商拍卖结束
+驳回：将车辆信息中状态status改为审核未通过，在T_CAR_WORK_FLOW中记录此次操作审核未通过与原因，并通知理赔系统不通过
+6.拍卖商确认取车→  carinfo的status改为4
+7.拍卖商确认拍卖（反馈拍卖价格）→carinfo的status改为3
+8.拍卖商确认过户 carinfo的status改为5
+
+沪O00000
+
+T_CAR_INFO
+T_CAR_WORK_FLOW 工作流表
+T_BID_PRICE 
+T_TRADE
+T_USER
+T_SET_VEHICLE_RESULT 处置结果
+
+
+Claim_CarDealResult 车辆询价
+
+
+http://10.1.12.183:27577/wechat-partner-service/service/RequestNewVehicleInquiry?wsdl
+
+版本：http://10.1.11.116:8080/daditestgroup/ccicsit/RequestNewVehicleInquiryService
+测试：http://10.1.11.115:8080/daditestgroup/ccicsit/RequestNewVehicleInquiryService

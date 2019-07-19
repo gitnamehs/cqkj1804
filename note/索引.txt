@@ -1,0 +1,18 @@
+1.创建索引可以不同扫描全表，直接去索引中查询。
+  但是索引不能太多，update表的时候会很慢
+4.查看索引
+
+
+	select index_name,index-type, tablespace_name, uniqueness from all_indexes where table_name ='tablename'; -- eg: 
+create index index_sno on student('name');
+
+	 select * from all_indexes where table_name='student';
+//all_indexes(所有索引在的表)通过表名去查找?
+
+创建索引：create index indexName on table ("字段")
+
+alert:修改。
+drop ：删除
+
+
+

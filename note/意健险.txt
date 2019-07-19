@@ -1,0 +1,32 @@
+1.sethead,setrequestbody(调用接口，需要传递参数request(head,body))
+2.registNo(报案号)，policyNo(保单号)
+3.一个类里面可以有多个内部类，就不用创很多类。
+4.查询个人保单信息分为两个部分：个人信息(perbaseinfo)，保单信息（调用per）\
+//不用每次判断是否为空。if（objectUtils.isEmpty(对象)）
+Optional<User> s =Optional.ofNullable(user);
+        //orElse(为空的时候返回默认的值)，orElseget(为空时。执行方法)
+        log.info("u.getAddress()"+s.map(u->u.getAddress()).map(address-> address.toLowerCase()).orElse("值为空"));
+        System.out.println(s.map(u->u.getAddress()).map(address-> address.toLowerCase()).orElse("值为空"));
+//map的作用就是将值进行转换。
+//limit(获取多少条),filter(过滤，)
+//spring-core（判断对象是否为空，String类型是否为空）
+集合截取长度 list.sublist(0,5)//左闭右开。
+@bean注解：
+@Configuration可以替换xml文件。利用@bean注解，初始化容器。
+给类添加注解，给一个属性添加注解变成组件
+1.riskType
+2.claimApply(理赔申请)
+3.cutsomerBinding(保单绑定)
+4.claimNotice(理赔通知)，claimStstus(理赔状态查询)
+//需求：1.不需要出险人状态，出险原因改为二级联动。map(key,value)--在SubmitReportDto里面修改
+//      2.在common里面有很多key-value ,accidentcode(事故编码)，PersonStatusCode（出险人状态）
+	3.在ccic包下面的ecif(里面可以查询个人信息，保单信息)
+//
+PolicyInfoSearchResponse response.
+设置请求头：
+设置请求体：
+调用接口。process()
+PolicyInfoSearchResponse policyInfoSearchResponse = policyInfoSearch.process(policyInfoSearchRequest);
+
+RequestHeadDto requestHead（请求头）
+HealthRequestDto requestbody(请求体)

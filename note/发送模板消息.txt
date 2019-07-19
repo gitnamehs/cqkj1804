@@ -1,0 +1,36 @@
+1.通过appid获取token
+  String token = tokenDao.getTokenByappid(String appid);
+String url=“https://api.weixin.qq.com”
+2.通过openid来获取来获取formid
+
+调用接口的时候：request,requesthead,requestbody(请求参数要设置头，body)
+                response responsehead,responsebody(响应参数)
+
+3.HealthRegistResponse //报案接口。
+4.ecifService//查询保单信息
+5.   reportNo = AESUtil.aesDecrypt(reportNo, SystemConfig.aesKey2);
+
+public interface PerCustNoSearch {//接口下面的
+  方法（process（perCustNoSearchRequest)//通过调用process来获取保单信息。
+  requestbody set 参数进去查询
+
+claimapply 里面有上传图片的代码（accident-health）
+
+//通过主键来更新，updateByprimarykey.(传递一个对象参数就可以)
+//根据传递的参数来更新，updateByselective(where id=#{})
+
+//获取unnionid,如果有就更新token，没有就创建unniod,token 插入到数据库。下回访问的时候就传入这两个参数，
+
+mapper是自动生成的，
+dao层调用mapper,在dao里面用组装数据，example.and\example.or
+
+public List<Task> searchTask(SearchTaskReqDto searchTaskReqDto) {
+        return taskMapper.searchTask(searchTaskReqDto);
+    }
+SearchTaskReqDto 继承 PaginationDto（分页参数）
+//foeach遍历集合 collection表示的是传入的集合
+<foreach item="item" index="index" collection="validStatusList" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+//复杂的sql语句，在mybatis里面自己写。（如果涉及到多个表之间的数据，创建一个dto来作为参数）
+//spring data jpa 如何一对多，多对一，查询

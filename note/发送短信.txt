@@ -1,0 +1,20 @@
+1.首先要发送验证码。
+
+//可以将insert 方法与update方法合并
+  public void saveMpCode(MpCode mpCode) {
+//通过手机号来查询某个对象。如果为空就代表没有，向数据库插入一条数据
+        MpCode mpCode1 = findMpCodeByPhone(mpCode.getPhone());
+        if (ObjectUtils.isEmpty(mpCode1)) {
+            mpCode.setId(UUIDUtil.getUUID());
+            mpCodeMapper.insertSelective(mpCode);
+        } else {
+		//如果有就重新更新验证码
+            mpCode1.setCode(mpCode.getCode());
+            MpCodeExample example = new MpCodeExample();
+            example.createCriteria().andPhoneEqualTo(mpCode.getPhone());
+            mpCodeMapper.updateByExampleSelective(mpCode1, example);
+        }
+    }
+
+//验证码通过算法生成。
+将验证码，短息内容，机构代码。。放在send方法里面。send方法调用提供的发送短信接口。

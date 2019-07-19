@@ -1,0 +1,45 @@
+public enum MessageType {
+	/**身份绑定
+	 */
+	BINDING("1"),
+	/**回访
+	 */
+	VISIT("2"),
+	/**
+	 * 电话直赔
+	 */
+	PHONEPAY("3"),
+	/**
+	 * 结案回访
+	 */
+	ENDVISIT("4");
+	
+	private String text;
+	MessageType(String text){
+		this.text =text;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+}
+//先创建字段括号里面的
+//利用构造方法，利用set,get
+
+//第二种方法
+public enum  Week {
+    MONDAY("1"),
+    TUESDAY("2");
+    private final String num;
+    Week(String num)
+    {
+       this.num=num;
+    }
+    public static void main(String[] arg){
+        String num = Week.MONDAY.num;
+        System.out.println(num);
+    }
+}

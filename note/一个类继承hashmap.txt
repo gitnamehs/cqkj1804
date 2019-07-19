@@ -1,0 +1,9 @@
+1.一个类如果继承HashMap，会得到HashMap里面所有的方法。
+
+  public class TemplateItem extends HashMap<String, Item> {
+        public TemplateItem() {}
+        public TemplateItem(String key, Item item) {
+            this.put(key, item);
+        }
+    }
+  //TemplateItem data 这个对象就可以获取Hashmap里面的方法。data.put();

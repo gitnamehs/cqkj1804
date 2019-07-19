@@ -1,0 +1,145 @@
+package com.yukens.utils;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import javax.swing.*;
+import java.io.FileOutputStream;
+import java.sql.*;
+
+/**
+ * @Description:利用poi，生成excel表格
+ * @Author:
+ * @Date:
+ * @Version:
+ */
+public class ExcelFormDB {
+
+
+    // 导出的Excel表的sheet名字设置为
+    public static String tables = "地址的信息";
+    // sql语句 选择导出数据库的哪个表rea_info
+    //可以用另外一个类来保存，并且设置为静态
+//    public static String sqls = "SELECT  r1.id as id编号, r1.BRAND_NAME as 品牌名称 ,r2.* FROM T_QUOTATION_INQUIRY r1 full join  T_QUOTATION_RESULT  r2 on r1.CCIC_INQUIRY_NO= r2.CCIC_INQUIRY_NO";
+    public static String sqls = "select Area_code,parent from T_AREA_INFO";
+
+    //创建连接
+    public static Connection con = null;
+    public static FileOutputStream fOut = null;
+
+    public static void excel() {
+        //连接数据库
+        try {
+            con = DriverManager.getConnection("jdbc:oracle:thin:@10.1.12.32:1521:cciccs11",
+                    "wxlpbusi", "ccic0919");
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        } catch (Exception e2) {
+            e2.printStackTrace();
+        }
+        // PreparedStatement 预编译
+        PreparedStatement ps_struts = null;
+        ResultSet rs_struts = null;
+        try {
+            //用当前时间作为文件名
+            String outputFile = String.valueOf(System.currentTimeMillis());
+            String path = "E:/mat/" + outputFile + ".xls";
+            System.out.println(path);
+            //HSSFWorkBook创建Excel文件(Workbook)
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //保存每一行的数据，每输入完一行就要清空
+            String[] tempo;
+            int rowNum = 1;
+            try {
+                //执行数据库的sq语句
+                ps_struts = con.prepareStatement(sqls);
+                rs_struts = ps_struts.executeQuery();
+                //获取数据
+                ResultSetMetaData rsm = rs_struts.getMetaData();
+                //关闭连接
+
+                //创建一个名字为(tables)的表原名字默认为sheet
+                HSSFSheet sheet = workbook.createSheet(tables);
+                //getRowCount 获取数据库表行的数量  getColumnCount获取列的数量
+                int columnCount = rsm.getColumnCount();
+                //把表头填好
+                try {
+                    //在Excel里创建行,从0开始
+                    HSSFRow row1 = sheet.createRow(0);
+                    for (int i = 0; i < columnCount; i++) {
+                        //让Excel自动适应列宽
+                        sheet.autoSizeColumn(i);
+                        //获取表列头的名字
+                        //注意getColumnName必须是从1开始。
+                        String columnName = rsm.getColumnName(i + 1);
+                        //创建行的单元格,也是从0开始
+                        HSSFCell cell1 = row1.createCell(i);
+                        //设置单元格内容
+                        cell1.setCellValue(columnName);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //循环数据库表中的每一行,来得到每一行的数据
+                while (rs_struts.next()) {
+                    //每循环一次创建一行从 1 开始
+                    HSSFRow row = sheet.createRow(rowNum);
+                    tempo = new String[columnCount];
+                    for (int i = 0; i < columnCount; i++) {
+                        //创建行的单元格,从0开始
+                        HSSFCell cell = row.createCell(i);
+                        //让Excel自动适应列宽
+                        sheet.autoSizeColumn(i);
+                        //getMetaData().getColumnName(i);字段名
+                        String columnName = rs_struts.getMetaData().getColumnName(i + 1);
+                        tempo[i] = rs_struts.getString(columnName);
+                        //设置单元格内容
+                        cell.setCellValue(tempo[i]);
+                    }
+                    //每次循环结束后要使数组为空，方便存储数据库表中下一行的数值
+                    tempo = null;
+                    //rowNum++ 下一次循环创建的行向下
+                    rowNum++;
+                }
+                //用当前时间作为文件名
+
+                fOut = new FileOutputStream(path);
+                workbook.write(fOut);//保存Excel文件
+                fOut.flush();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //关闭数据库连接
+            try {
+                if (fOut != null) {
+                    fOut.close();//关闭文件流
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        JOptionPane.showMessageDialog(null, "导出完成");
+    }
+
+    public static void main(String[] arg) {
+
+        ExcelFormDB.excel();
+
+
+    }
+}
+
+
+

@@ -1,0 +1,27 @@
+1.shiro的原理：首先进行身份认证，（根据用户名，密码，获取角色）
+2.认证正确以后就根据角色进行授权(可以访问哪些资源)。
+3.subject(用户主体)‘shiro.xml
+4.securtyManager(shiro核心，安全管理器)
+5. 创建token令牌，token中有用户提交的认证信息即账号和密码
+2、 执行subject.login(token)，最终由securityManager通过Authenticator进行认证
+   用户-角色（多对多）角色--权限（多对多）
+
+
+在控制器登录的时候创建一个token ，subject.login(token)
+在myRealm里面的认证中 获取那个token 根据那个token来获取用户名，根据用户名去数据库查询
+将token里面的数据与查询出来的数据进行对比。
+如果一样，就将信息放在认证的info里面
+--授权：根据token里面的userName去查询List<Role>role 、创建授权info info.addRole(role.getNmae--admin)
+
+//在控制器获取shiro权限
+@RequiresRoles("admin")//如果角色是admin就可以执行hello方法
+public void hello() {
+//有权限
+}
+//根据登录的用户查询角色。@Request
+//shiro也可以管理session subject.getSession();
+	session.setAttribute("user",user)
+//
+认证是否有权限进入系统
+ //将填写的登录信息与数据查出来的进行比较
+            return new SimpleAuthenticationInfo(token.getUsername(), token.getPassword(), getName());

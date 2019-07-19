@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yukens.mapper.ExcelReportMapper">
+    <resultMap id="BaseResultMap" type="com.yukens.dto.ExcelReport">
+        <result property="inqueryNo" column="询价单号"></result>
+        <result property="insuranceNo" column="报案号"></result>
+        <result property="inqueryTime" column="询价接收时间"></result>
+        <result property="quotationTime" column="报价提交时间"></result>
+        <result property="orderTime" column="下单时间"></result>
+        <result property="resultTime" column="交易确认时间"></result>
+        <result property="brandName" column="品牌名称"></result>
+        <result property="partId" column="配件标准代码"></result>
+        <result property="partName" column="配件标准名称"></result>
+        <result property="partNum" column="换件数量"></result>
+        <result property="partPrice" column="询价参考价"></result>
+        <result property="partType" column="询价配件品质"></result>
+        <result property="quotationPrice" column="汽配商报价单价"></result>
+        <result property="proName" column="省"></result>
+        <result property="cityName" column="市"></result>
+        <result property="detailAddress" column="区"></result>
+        <result property="sellerName" column="修理厂详细地址"></result>
+        <result property="sellerId" column="汽配商编号"></result>
+        <result property="connectName" column="定损人员名称"></result>
+        <result property="connectPhone" column="定损人员电话"></result>
+        <result property="orderType" column="是否直供"></result>
+        <result property="orderStatus" column="订单状态"></result>
+    </resultMap>
+
+    <select id="selectByWeek" resultMap="BaseResultMap">
+        SELECT 'r' || t.INQUIRY_NO AS 询价单号,i.INSURANCE_NO AS 报案号,to_char(t.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') AS 询价接收时间,to_char(r.UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss') AS 报价提交时间,to_char(o.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') AS 下单时间,to_char(d.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') AS 交易确认时间 ,i.BRAND_NAME AS 品牌名称,
+ip.CCIC_PART_INQUIRY_ID AS 配件标准代码,ip.PARTS_NAME AS 配件标准名称,ip.PART_NUM AS 换件数量,ip.QUOTATION_AMOUNT AS 询价参考价,CASE ip.PART_TYPE
+	WHEN '2' THEN
+		'品牌'
+	WHEN '3' THEN
+	  '原厂'
+	ELSE NULL
+END 询价配件品质,
+REGEXP_SUBSTR(SUBSTR(rp.PRICES, INSTR (rp.PRICES, ':', 1, 3)+1), '\d*(\d*\.\d*)?') AS 汽配商报价单价,
+(SELECT a.AREN_NAME FROM WXLPBUSI.T_AREA_INFO a WHERE a.AREA_CODE = i.PRO_NAME) AS 省,
+(SELECT a.AREN_NAME FROM WXLPBUSI.T_AREA_INFO a WHERE a.AREA_CODE = i.CITY_NAME) AS 市,
+(SELECT a.AREN_NAME FROM WXLPBUSI.T_AREA_INFO a WHERE a.AREA_CODE = i.DISTRICT) AS 区,
+i.DETAIL_ADDRESS AS 修理厂详细地址,
+u.SELLER_NAME AS 汽配商名称,u.SELLER_CODE AS 汽配商编号,i.CONTACT_PERSON AS 定损人员名称,i.CONTACT_PHONE AS 定损人员电话,CASE o.ORDER_TYPE
+	WHEN '0' THEN
+		'直供'
+	WHEN '1' THEN
+		'推单'
+	ELSE NULL
+END 是否直供,
+CASE d.ORDER_STATUS
+	WHEN '0' THEN
+		'未成交'
+	WHEN '1' THEN
+		'已支付'
+	WHEN '2' THEN
+		'已发货'
+	WHEN '3' THEN
+		'已到货'
+	ELSE NULL
+END 订单状态
+FROM WXLPBUSI.T_QUOTATION_TASK t
+LEFT JOIN WXLPBUSI.T_QUOTATION_INQUIRY i ON t.CCIC_INQUIRY_NO = i.CCIC_INQUIRY_NO
+LEFT JOIN WXLPBUSI.T_INQUIRY_PARTS ip on ip.CCIC_INQUIRY_NO = i.CCIC_INQUIRY_NO
+LEFT JOIN WXLPBUSI.T_QUOTATION_RESULT r ON t.INQUIRY_NO = r.INQUIRY_NO
+LEFT JOIN WXLPBUSI.T_RESULT_PARTS rp on rp.INQUIRY_NO = r.INQUIRY_NO AND ip.CCIC_PART_INQUIRY_ID = rp.CCIC_PART_INQUIRY_ID
+LEFT JOIN WXLPBUSI.T_QUOTATION_ORDERING o ON t.INQUIRY_NO = o.INQUIRY_NO
+LEFT JOIN WXLPBUSI.T_QUOTATION_DELIVERING d ON t.INQUIRY_NO = d.INQUIRY_NO
+LEFT JOIN WXLPBUSI.T_QUOTATION_USER u ON u.SELLER_CODE = t.SELLER_ID
+where  to_char(t.CREATE_TIME,'iw')=#{week}
+
+
+  </select>
+
+
+</mapper>

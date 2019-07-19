@@ -1,0 +1,23 @@
+1.一个对象要注入，但是又要有值。依赖注入的时候不能通过构造方法赋值。
+    利用注解@postContruct。在注入完成之后，初始化。
+
+ ****   被@PostConstruct修饰的方法会在构造函数之后，init()方法之前运行。
+//	什么时候调用：在加载servlet容器的时候，在构造方法之后，init方法之前。
+//	servlet的生命周期：首先加载servlet容器，init()初始化，只会一次。3.调用service()方法，4,destory()销毁
+     public class InsuredCardTypeCode {
+    private static Map<String, String> map = new HashMap<String, String>();
+
+    @PostConstruct //修饰非静态的方法
+    private void init() {
+        log.info("被保人身份证字典初始化开始！");
+        map.put("居民身份证", "111");
+        map.put("临时居民身份证", "112");
+        map.put("户口簿", "113");
+        log.info("被保人身份证字典初始化结束！");
+    }
+
+    public static String getValue(String key) {
+        return map.get(key);
+    }
+
+}

@@ -1,0 +1,44 @@
+//如果要添加一个新的字段，重新创建一个dto继承上一个，将上一个查询的数据，利用set方法获取值。
+
+eg:
+List<PersonnelList> personnelLists = listRepository.findAll(specification);
+        //将查询出来的数据重新放到类型为RankList的集合中
+List<RankList> formerRankLists = new ArrayList<RankList>();
+//新建一个ranklist类，继承PersonnelList并且添加一个新的字段 ranchange.
+
+ for (PersonnelList list : personnelLists) {
+                RankList rank = new RankList();
+                rank.setSubCompany(list.getSubCompany());
+                rank.setFourLevelAgency(list.getFourLevelAgency());
+                rank.setThreeLevelAgency(list.getThreeLevelAgency());
+                rank.setPersonnelName(list.getPersonnelName());
+                rank.setPersonnelCode(list.getPersonnelCode());
+                rank.setPostName(list.getPostName());
+                rank.setReduceCompensation(list.getReduceCompensation());
+                //将rank对象保存在集合
+                formerRankLists.add(rank);
+---mybatis-generator:genrate-e 自动生成dao,mapper
+
+//mybatis里面的映射：select的字段必须是《id column=""》里面的
+//将传递的json字符串变成对应的对象  json.parseobject(String,notice.class)
+//怎么变成json字符串
+
+--前后端分离：前台调用接口（就是controller里面的方法，获取json数据，在渲染页面）
+ ---      svn url: http://10.1.15.50:80/WXCLAIM
+  密码：hs@123456 
+   git密码：12345678
+//////////////////////////////////////
+lombok里面的@builder. private的setter方法，利用类.builder()来给参数赋值。
+、、、、、使用@data的问题：如果写了显示的方法，或者构造方法，就不会自动构造。equals().如果有继承关系，就不会比较父类的属性。
+
+databus:实时抓取数据库变更。分布式
+insert,update,delete.
+               db库
+
+-------------------------------------------------------------------------------------
+oracle里面的全连接：full join.
+mysql 不支持 full join .可以利用union（使用前提必须相同的列） union all(支持重复值)
+---------------------------------------------------------------------------------------------
+网络通信（scoket,webservice,tcp,http）,druid(数据库连接池)，common io(输入，输出)
+common beanutil(复制，)BeanUtils.copyProperties(teacher,teacherForm); //赋值将teacherForm的值赋值给teacher。
+

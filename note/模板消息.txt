@@ -1,0 +1,92 @@
+log.info("发送询价单结果通知接收的参数：{}", JSON.toJSONString(notice));
+        WeiXinTeamplateMsg weiXinTeamplateMsg = new WeiXinTeamplateMsg();
+        try {
+            FormID formID = formIdDao.findFormIdByOpenId(notice.getOpenId());
+            log.info("查询的formId:{}", JSON.toJSONString(formID));
+            if (!ObjectUtils.isEmpty(formID)) {
+                String accessToken = (String) tokenDao.findAccessTokenByAppid(SystemConfig.mpAppid).getAccessToken();
+                log.info("模板消息accessToken", JSONObject.toJSONString(accessToken));
+                String url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=" + accessToken;
+                String touser = notice.getOpenId();
+                String formId = formID.getFormId();
+                //模板id
+                weiXinTeamplateMsg.setTemplate_id(Constant.ORDERING_RESULT);
+                weiXinTeamplateMsg.setForm_id(formId);
+                weiXinTeamplateMsg.setTouser(touser);
+                weiXinTeamplateMsg.add("keyword1", notice.getRegistNo());
+                weiXinTeamplateMsg.add("keyword2", notice.getBrandName());
+                weiXinTeamplateMsg.add("keyword3", notice.getVinCode());
+                weiXinTeamplateMsg.add("keyword4", notice.getResult());
+                weiXinTeamplateMsg.add("keyword5", notice.getContactName() + " " + notice.getContactPhone());
+                weiXinTeamplateMsg.setPage("pages/microIndex/microIndex");
+
+                log.info("__________模板消息request__________:{}", weiXinTeamplateMsg.build());
+                JSONObject response = HttpClientUtils.getJSONObjectByPost(weiXinTeamplateMsg.build(), url);
+                log.info("询价单结果通知发送结果：" + JSON.toJSONString(response));
+                log.info("模板消息发送成功！");
+            }
+        } catch (Throwable throwable) {
+            log.error("询价单结果通知通知发送异常：" + throwable.getMessage());
+            throwable.printStackTrace();
+        }
+        log.info("通知接口处理完毕！");
+    }
+
+
+
+ log.info("发送通知接收的参数：{}", JSON.toJSONString(carAuditNotifyDto));
+        TreeMap<String,TreeMap<String,String>> params = new TreeMap<String,TreeMap<String,String>>();
+        WechatTemplateMsg wechatTemplateMsg = new WechatTemplateMsg();
+        String accessToken = accessTokenService.getAccessTokenByAppId("wxbd8bd471fc4456a2").getAccessToken().toString();
+        log.info("模板消息accessToken", JSONObject.toJSONString(accessToken));
+        String url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=" + accessToken;
+        wechatTemplateMsg.setUrl( url);
+        wechatTemplateMsg.setTemplate_id(NOTICE1_TEMPLATE_ID);
+        wechatTemplateMsg.setTouser("o3Lny5K_SmgChx1Cr0EJ5sEe3okc");
+        params.put("first", WechatTemplateMsg.item("你好", "#000000"));
+        params.put("keyword1",WechatTemplateMsg.item("天气", "#000000"));
+        params.put("keyword2",WechatTemplateMsg.item("ds", "#000000"));
+        params.put("keyword3",WechatTemplateMsg.item("sfsd", "#000000"));
+        params.put("remark",WechatTemplateMsg.item("jdfj", "#000000"));
+        wechatTemplateMsg.setData(params);
+        JSONObject response=send(wechatTemplateMsg);
+        return response;
+
+///通过httpcliensutils工具类里面的getjsonobjectpost(对象，url)获取reponse
+
+///assocation javaType(对应一端)。
+///collection ofType(对应一个集合)
+
+httpclient相当于一个浏览器。传输接收hhtp消息。hhtp协议。超文本传输协议。请求头，请求行，请求体。
+        支持代理服务器 nginx
+
+fastjson //将对象变成json数据
+实现负载均衡：利用集群式服务器。通过代理服务器充当一个负载均衡服务器
+//多线程中 实现的方法有两种：extends ,implemnets(利用Thread 来创建对象。调用start方法)、
+//join方法让其结束后，其他线程才可以调用。
+
+SELECT  FROM_UNIXTIME(ctime,'%Y%m') months,COUNT(id)  from dual
+where  FROM_UNIXTIME(ctime,'%Y%H')>8 group by months having month=8
+select  SYSDATE from dual 
+select to_char(sysdate,'YYYY') FROM DUAL
+select  SYSDATE from dual 
+select to_char(sysdate,'yyyy')-to_char(sysdate,'mm') FROM DUAL
+
+　 select to_char(sysdate,'Mi') from dual;//显示分钟
+　 select to_char(sysdate,'hh24') from dual;//显示24进制小时数
+httpclient 与restTemplate的区别：
+1，先创建httpclient对象：
+2.创建httpget，httppost.
+ CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        // 2.创建一个httpGet对象
+        HttpGet request = new HttpGet(uri);
+        CloseableHttpResponse response = null;
+
+        try {
+            // 3.执行请求调用httpclient的execute(),传入httpGet对象，返回CloseableHttpResponse
+            response = httpClient.execute(request, HttpClientContext.create());
+
+???????????????????????
+restTemplate//在springboot中先利用@bean注解。
+uri里面set数据进去
+restTemplate.getForObject(uri, Object.class);

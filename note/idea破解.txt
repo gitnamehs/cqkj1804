@@ -1,0 +1,4 @@
+在Vmoptional文件中添加下面这行代码
+把这个jar包放在bin下面
+http://idea.lanyus.com/jar/JetbrainsCrack-3.1-release-enc.jar
+-javaagent:D:\IDEA\IntelliJ IDEA 2018.1.4\bin\JetbrainsCrack-3.1-release-enc.jar

@@ -1,0 +1,57 @@
+两个Date类型字段：START_DATE，END_DATE，
+计算这两个日期的时间差（分别以天，小时，分钟，秒，毫秒）：
+
+天：
+
+
+ROUND(TO_NUMBER(END_DATE - START_DATE))
+
+小时：
+
+ROUND(TO_NUMBER(END_DATE - START_DATE) * 24)
+
+
+分钟：
+
+ROUND(TO_NUMBER(END_DATE - START_DATE) * 24 * 60)
+
+
+秒：
+
+ROUND(TO_NUMBER(END_DATE - START_DATE) * 24 * 60 * 60)
+
+
+毫秒：
+
+ROUND(TO_NUMBER(END_DATE - START_DATE) * 24 * 60 * 60 * 1000)
+--------------------- 
+作者：南北雪树 
+来源：CSDN 
+原文：https://blog.csdn.net/u010963948/article/details/53230054 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
+//可以直接调用resttemplate////在pom文件中引用springframework :spring-web
+
+在第三方报价里面有dateTimeUtil(利用localDateTime)
+  // /**
+     * Description 判断两个时间相差多少小时
+     * Created by hs on
+     */
+    public static long getDurationHour(LocalDateTime statrTime, LocalDateTime endTime) {
+        Duration duration = Duration.between(statrTime, endTime);
+        return duration.toHours();
+    }
+
+    /***********************************************************************/
+    public static void main(String[] arg) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime localDateTime1 = localDateTime.plusMinutes(20);
+        //判断两个时间相差多久，是以结束时间减去开始时间
+        Duration duration = Duration.between(localDateTime, localDateTime1);
+        System.out.println(duration.toMinutes());
+        if (duration.toMinutes() < 15) {
+            System.out.println("小于15分钟");
+        } else {
+            System.out.println("大于15分钟");
+        }
+    }

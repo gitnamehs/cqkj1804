@@ -1,0 +1,33 @@
+ioc是spring 里面的核心：
+	将所有创建的类交给spring 容器去处理。管理它的生命周期（生成，销毁）
+	以前都是对象管理自己的生命周期--控制反转
+	创建一个对象（ new ，反射，反序列化）
+
+如果A对象中需要b对象，会动态的给某个对象提供它需要的的其他对象（di,依赖注入）。怎么构造，何时构造不需要知道。
+	容器帮我们创建对象的方法时通过依赖注入：有构造方法，以及set注入
+
+aop面向切面编程
+	@aspect 切面类：一个独立的模板（打印日志，登录）
+	连接点 setTeacher方法就是一个连接点。切面切入的具体位置
+	切点(正则表达式) 需要在什么地方执行通知advice 切入到什么连接点上（也就是方法上）相当于筛选连接点，
+	advice(需要共同处理的模板)
+	织入 在连接点上织入advice(打印日志) 
+        切面就是：通知与切点的结合
+
+服务鉴定，只有成功才可以调用接口 web s ---ccic-minapp
+用一个类来保存appid,seckey
+
+Localcache //本地缓存
+public class Auth {
+    public static LoadingCache <String, AuthDto> LocalCache = CacheBuilder
+            .newBuilder()
+            .maximumSize(100L)//最大保存量
+            .expireAfterWrite(1, TimeUnit.DAYS)//定义过期时间一天，
+            .build(new CacheLoader <String, AuthDto>() {
+                @Override
+                public AuthDto load(String key) throws Exception {
+                    return null;
+                }
+            });
+
+}

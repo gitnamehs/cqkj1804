@@ -1,0 +1,7 @@
+ //数组变集合
+String[] str ={...};
+List<String> list = Arrays.asList(str);
+
+//集合变数组
+
+list.toArray();

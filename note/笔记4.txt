@@ -1,0 +1,76 @@
+1.通过访问controller来测试方法。
+localhost：8080、sale/wx/sendNotice
+    @RequestMapping(value = "/sendNotice")
+    @ResponseBody
+    public HttpMessageResult sendNotice()
+    {
+        log.info("dsd");
+        sendTemplate.sendTemplateNotice1();
+        return HttpMessageResult.success();
+
+    }
+
+1.发送模板消息：url+accesssToken. formId,openid发送给谁。模板id
+ 网络代理 proxy httpclinet
+ public static JSONObject getJSONObjectByPost(String user_list, String url) {
+        log.info("请求微信接口数据++++++++,{}", JSONObject.toJSONString(user_list), url);
+        //设置代理
+        //int proxy_port = Integer.parseInt(WechatConfig.getProperty("proxy_port"));
+        //HttpHost proxy = new HttpHost("10.1.166.166", 8080);
+        HttpHost proxy = new HttpHost("10.1.27.102", 8080);
+        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+        //创建httpClient连接
+        CloseableHttpClient httpClient = HttpClients.custom().setRoutePlanner(routePlanner).build();
+
+		/*//创建httpClient连接
+		CloseableHttpClient httpClient = HttpClients.createDefault();*/
+
+        JSONObject result = null;
+        //UrlEncodedFormEntity entity = null;
+        try {
+            HttpPost httpPost = new HttpPost(url);
+            // 为HttpPost设置实体数据
+            //httpPost.setEntity(entity);
+            HttpEntity entity = new StringEntity(user_list, HTTP.UTF_8);
+            httpPost.setEntity(entity);
+            // HttpClient 发送Post请求
+            CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                // CloseableHttpResponse
+                HttpEntity httpEntity = httpResponse.getEntity();
+                if (httpEntity != null) {
+                    BufferedReader reader = null;
+                    try {
+                        reader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), "UTF-8"), 10 * 1024);
+                        StringBuilder strBuilder = new StringBuilder();
+                        String line = null;
+                        while ((line = reader.readLine()) != null) {
+                            strBuilder.append(line);
+                        }
+                        // 用fastjson的JSON将返回json字符串转为json对象
+                        result = JSON.parseObject(strBuilder.toString());
+                        log.info("++++++公众号模板消息返回报文+++++++++++++++++++:{}", JSONObject.toJSONString(result));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (reader != null) {
+                            try {
+                                //关闭流
+                                reader.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+//初始化失败，因为maven仓库的问题，导致jar出现问题。更换repository。
+
+获取access_Token 需要appid，appscerect。         String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+

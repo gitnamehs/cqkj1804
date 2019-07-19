@@ -1,0 +1,48 @@
+Handler是Android SDK来处理异步消息的核心类。 
+子线程与主线程通过Handler来进行通信。子线程可以通过Handler来通知主线程进行UI更新。
+model里面放类
+dto的作用，传递数据
+dao层调用mappr里面的方法。
+serviceimpl调用dao里面的方法
+layui前端框架，springboot，mybatis
+端口号是8081
+yukens
+httpMessageResult(消息处理)
+@Target({ElementType.TYPE}) ElementType 是枚举类型
+@Retention(RetentionPolicy.SOURCE)编译完之后，注解被抛弃
+
+produce，qianxun yukens(jdbc连接数据库) REDEPLOY（调整，重新部署）
+运行application(com.yukens.common.AreaTool)
+判断一个集合是否包含一个元素  lst.contains("aaa")返回一个boolean类型 
+
+记录日志的方法：@Sif4j(是一个接口)
+ccic是什么。
+
+定义一个枚举类型：enum Status{  大写CREATE("jdh",4)  specifi    }
+
+condition(管理线程里面的锁)lock.lock(); //解锁lock.unlock();
+----Dto是用来传递数据的，如果用类来做对象传递，有些字段用不上，浪费空间
+------config里面的类有什么用， 类的注释怎么生成的，类与Dto有什么关系。service，service.Impl,加了@data之后就可以调用setid,或者getid
+@component,@repository(dao层),@service(实现层),@mapple
+sql片段。《sql></sql>比如引用的字段，select （字段可以引用）
+<sql id="orderAndItem">
+    o.order_id,o.cid,o.address,o.create_date,o.orderitem_id,i.orderitem_id,i.product_id,i.count
+</sql>
+<select id="findOrderAndItemsByOid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+<!--引用sql片段-->
+    <include refid="orderAndItem" />
+    from ordertable o
+    join orderitem i on o.orderitem_id = i.orderitem_id
+    where o.order_id = #{orderId}
+</select>
+
+mapper里面的方法对应mybatis里面的sql语句 控制器调用service里面的方法
+@data 注解给属性添加get，set方法 lombok这个插件可以省略setter,构造方法。pom里面看依赖关系
+
+《trim></trim> jdbctype 里面的other类型，DECIMAL（十进制），varchar，other，TIMESTAMP 时间戳，保证插入的时间不会重复。
+
+从git里面下载项目到idea，通过Login，选择password。 dao-service-controller
+
+如何设置 maven项目的本地仓库   buildpath build tool 选中maven home 地址。
+

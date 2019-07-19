@@ -1,0 +1,53 @@
+commons  io 文件的下载
+    /**
+     * Description 从远程url链接中下载文件到本地
+     */
+    public static void downloadFile(String remoteFilePath, String localFilePath, String proxy_host, String proxy_port) throws Throwable {
+        log.info("文件上传url路径：" + remoteFilePath + "|" + "本地路径：" + localFilePath);
+        OutputStream outputStream = null;
+        InputStream inputStream = null;
+//设置代理
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy_host, Integer.parseInt(proxy_port)));
+        try {
+            //图片下载
+            URL url = new URL(null, remoteFilePath, new sun.net.www.protocol.https.Handler());
+            URLConnection conn = url.openConnection(proxy);
+            outputStream = new FileOutputStream(localFilePath);
+            inputStream = conn.getInputStream();
+            IOUtils.copy(inputStream, outputStream);
+        } catch (Throwable e) {
+            log.error("图片下载异常！" + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(outputStream);
+        }
+    }
+   JOptionPane.showMessageDialog(null, "导出完成");//swing提示框
+//现根据数据有多少行，然后根据行数来决定创建多少个线程。
+
+//多线程使用场景：下载文件,
+//poi，将sql查询结果变成Excel表格
+。
+
+定时任务（查询上一周所有的数据），导出，发送给莫个人，spring 里面的定时器
+
+报案号可以，询价接受时间
+
+问题。下面就来分享一下maven中的profile和filtering的属性。filter的作用是将配置文件里面的$(db.url)=aaa,,url=aaa; 属性为true(过滤)
+                                                         profile 概述
+@@@@@@@@@@@@@@@@@@@@@@@maven项目初始化失败点击项目reimport,更换jdk版本，
+自动注入失败：spring。
+接口上要写@comment,@repository
+//spring注解
+@Resource的作用相当于@Autowired，只不过@Autowired按byType自动注入，而@Resource默认按 byName自动注入罢了。@Resource有两个属性是比较重要的，分是name和type
+
+//在appservlet里面设置访问权限
+ <mvc:mapping path="/**"/>拦截
+            <mvc:exclude-mapping path="/KVAaGAsoP4.txt"/>不拦截
+mapper.xml必须与mapper名字相同，配置文件里面的namespace必须是接口的路径
+
+-------------------------------------------------------------------
+--spring注入为空 ，怎么测试，利用控制器去访问就可以解决
+关于resultMap里面的映射问题。创建一个dto,全部映射。column里面是字段名，如果取了别名，那么column里面的属性就是别名（中文也可以）

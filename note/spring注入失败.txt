@@ -1,0 +1,65 @@
+1.在工具类中调用可以将工具类变成组件@componnent.
+@repository 放在持久层即dao层。
+@service 实现类上面。
+@controller 控制层
+@component //普通类上面的组件
+
+@Component-----------变成组件
+public class TestUtils {
+    @Autowired------
+    private ItemService itemService;
+ 
+    @Autowired
+    private ItemMapper itemMapper;
+ 
+    public static TestUtils testUtils;------设置静态对象
+ 
+    @PostConstruct --------初始化
+    public void init() {
+     
+        testUtils = this;
+    }
+}
+如果同一个类有多个实现类，要在@sevice("dogimpl"),@service("catimpl")
+  @Resource(name="dogImpl")        //实现类1中 @Service注解中标定的名称
+    private IAnimal dogImpl;
+
+ @Resource(name="catimpl")        //实现类1中 @Service注解中标定的名称
+    private IAnimal catimpl;
+2.  @Qualifier("DaoImpl")        //实现类1的类名。注意区分与@Resource(name="dogImpl") 的区别。
+    private IAnimal dogImpl;
+3.@autowired只有有一个实现类的时候才可以用
+--------------------------------------------------------------------------
+
+//utils工具类中使用service和mapper接口的方法例子，用'testUtils.xxx.方法' 就可以了
+
+public static void test(Item record){
+     //通过静态对象点出属性
+    testUtils.itemMapper.insert(record);
+    testUtils.itemService.queryAll();
+
+----------------------------------------------
+oracle里面的正则表达式：instr(获取字符的位置)，substr(截取字符串，)，regexp_substr(str,'\d*(\d*\.*\d)?')
+select INSTR (rp.PRICES, ':', 1, 3)+1 AS  PRICE from WXLPBUSI.T_RESULT_PARTS rp where INQUIRY_NO =338386700667588608
+select SUBSTR(rp.PRICES, INSTR (rp.PRICES, ':', 1, 3)+1)  AS  PRICE from WXLPBUSI.T_RESULT_PARTS rp where INQUIRY_NO =338386700667588608
+INSTR(str, 是获取字符串的位置，substr是截取字符串) substr('sdsf',0|1都表示从1=第一个字符开始，3表示截取的长度)
+--------------------------------------------------------------------------------------------------
+分页查询（三层嵌套，2,3写where条件）注意（第二层里面不能用别名来显示）
+select * from(
+ 
+ select r.*,ROWNUM rum from (select seller_id from T_QUOTATION_RESULT  ) r where ROWNUM<=5
+
+)
+WHERE rum>=1
+select * from (select r.*,ROWNUM from(select INQUIRY_NO from T_QUOTATION_RESULT ) r where ROWNUM<=5)
+where ROWNUM>=1
+
+//example,,,mapple(方法里面传入example.将值放进去)
+mapple 里面有List<inquery> selectExample (inqueryExample example)
+//在dao层里面给example设置值。 inqueryExample(里面有方法)，example.createCrition(创建标准)创建where条件
+
+ /*调用databus的报价结果回写到理赔*/
+                    SystemConfig.dataBusPublishClient.send(SystemConfig.quotationResult,
+                            SystemConfig.databusSource, resultReqDto.getInquiryNo(), JSON.toJSONString(resultReqDto));
+查询任务状态：0,1无效，还是有效
+查询待领取的任务，在

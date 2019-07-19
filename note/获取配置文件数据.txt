@@ -1,0 +1,23 @@
+private void init(){
+		//读取外部配置参数
+		InputStream in=this.getClass().getClassLoader().getResourceAsStream("DBConfig.properties");
+		Properties properties=new Properties();
+		try {
+		//将信息有key-value形式化properties
+			properties.load(in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		jdbcDriver=properties.getProperty("jdbcDriver");
+		userName=properties.getProperty("userName");
+		jdbcUrl=properties.getProperty("jdbcUrl");
+		password=properties.getProperty("password");
+		initCount=Integer.valueOf(properties.getProperty("initCount"));
+		stepSize=Integer.valueOf(properties.getProperty("stepSize"));
+		poolMaxSize=Integer.valueOf(properties.getProperty("poolMaxSize"));
+		}
+--------------------- 
+作者：liuj1017 
+来源：CSDN 
+原文：https://blog.csdn.net/weixin_38560145/article/details/87879151 
+版权声明：本文为博主原创文章，转载请附上博文链接！

@@ -1,0 +1,56 @@
+1，先用 mvn clean package 打包maven项目。
+2.在edit 里面编辑 ，重新添加atrifacts，
+3.在reimport 
+4.最后重新启动
+
+
+//如果是一个类进行查询，利用 selectByexample就可以。
+    List <BankInfo> selectByExample(BankInfoExample example);
+  //在mapper.xml里面接可以直接引用 <sql id="Example_Where_Clause">//查询条件都放在里面
+
+
+//模糊查询：bankName like "%"#{bankName}"%"---或者 concat(#{bankName},'%')--oracle里面concat里面的参数只能有两个，mysql可以有很多
+
+//在oracle里面 select 后面的数据必须是group by 里面的字段
+//update set参数，不能用example，只有查询的数据才能放在example里面
+ <include refid="Update_By_Example_Where_Clause"/>
+
+提交的时候：一定要先pull,
+  选择提交的时候：一定要勾选清楚自己要提交的，点击commit and  push （一定要先pull在提交)
+
+//创建临时表（分为：会话临时表()，事务临时表(当事务提交\回滚之后，就会drop)）
+create table Log if not exist (id int(5),num int(10))
+truncate table log(删除表数据，表结构还在,不可以回滚)
+delete (是逐行删除，可以回滚)
+drop是将整个表都删除。
+
+//////////////////验证是否为空
+///模糊查询（like #{bankName}||'%'，，，，concat(#bankName,'%')）
+创建索引 
+sql优化：避免进行算术运算，exists 代替 in.不能用is null 来判断，where，group by 经常用到的字段要创建索引
+create index i_temp on T_bankInfo(bankName,code)//对这两个字段添加索引
+-----------------------------
+DISTINCT 必须放在开头
+DISTINCT c_NAME 
+
+@ResponseBody//可以将数据以json格式返回
+(@RequestParam String unionId)//获取参数
+@RequestBody BindingRequestDto bindingRequestDto)将前端传递过来的json格式进行解析
+
+
+注意到 Id 是从1开始递增的，则需要查找出 Id 连续且 Num 相等的数字即可，注意最后要重命名列名为 ConsecutiveNums。
+
+select distinct l1.Num as ConsecutiveNums  
+from  Logs l1, Logs l2, Logs l3   
+where l1.Id=l2.Id-1 and l2.Id=l3.Id-1 
+and l1.Num = l2.Num and l2.Num = l3.Num 
+//思路：连续出现3次以上：自查询自己三次 from log 1，log 2， log 3
+ 条件： l1.Id=l2.Id-1 and l2.Id=l3.Id-1 
+and //id要连续。 且num要相等
+
+
+//首先查询总部银行，模糊查询。//查询获取id,bankname.//放入一个集合中。
+//在locations里面//通过参数 banid-id来获取分支银行的数据。//将查询出来的数据set进branchBank对象里面，在将这些对象放进一个集合里面
+ BankLocationsExample example = new BankLocationsExample();
+        example.createCriteria().andCBankidEqualTo(bankId);
+        return bankLocationsMapper.selectByExample(example);//查询利用select

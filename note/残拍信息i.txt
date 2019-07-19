@@ -1,0 +1,63 @@
+1.保险公司询价？Inquiry询价。bid出价。trade商品
+保险审核员对车辆信息进行审核，
+残拍商是公司。残拍类型：分别是特货车、客车、全部，残拍区域（一个公司在好多地区有分店）
+残拍商出价，审核员选取前面最高的两个出价，给理赔员。
+保险理赔根据出价结果分为是三种情况。推全拍卖，二次询价(审核通过，添加)，维修(拍卖结束)。
+access token 获取调用接口的权限
+area--地区，创建时间，更新时间
+areainfo--包含地区信息。编号。。
+bidprice--出价价格。
+car-work-flow工作流表记录 是否审核通过，status。
+OrganizationArea公司（残拍商）
+T_SET_VEHICLE_RESULT 处置结果
+clarm-car 车辆声明。certification（许可证书）
+Specification--包含各种enum--状态，role等
+mpper-dao-service
+auditor审核
+auction 拍卖
+specifial 枚举类型（各种状态的表示）
+insurance 保险公司
+valid 有效的
+trade 贸易。
+reportNo(报案号)
+concat只能连接两个字符串，||可以连接多个字符串
+模糊查询：SELECT *  FROM  user  WHERE  name like CONCAT('%',#{name},'%')  
+mysql里面：concat可以连接多个
+ <insert id="insert" parameterType="com.yukens.model.AreaInfo" >
+    <!--
+       parameterType表示传入的参数类型
+choose与if的区别：choose《when,otherwise》只要一个满足就结束。if只有条件成立，才执行。
+AuditorDto里面有一个降序的方法。实现compareable接口在本类中自己跟自己比较。
+				实现compareator接口比较两个对象（默认两个对象是一样的）
+拍卖结果【见字典表】directionary
+terminal--输入mvn clean package打包maven项目
+在broken-car-sale里面的yukens里面的application。properties里面设置连接数据库的信息
+理赔员询价---（将结果发给）审核员--（选择是否通过，通过就进入拍卖厅，否则驳回让理赔员二次询价（要比上一次高））
+   拍卖商可以在拍卖中看见车的信息与起拍价。--拍卖商出价--理赔员可以根据出价情况分为三种结果（推全拍卖---通知给审核员--通知拍卖商中标，将拍卖信息发给拍卖商）
+
+----auth权限	
+//survey 查勘员//auditor 审核员//auctioneer 残拍商//head 总部审核员	
+baseDataDTO.setComCode(carInfo.getComcode());//机构号
+        baseDataDTO.setOperator(carInfo.getOperator());//查勘员工号
+        baseDataDTO.setOperatorRole("CLRole01");//操作角色									    二次出价--通知给审核员--联系拍卖商进行二次询价
+//要添加fastJson jar包											    送修---通知给审核员--该车辆信息设置为无效。---通知拍卖商竞拍结束
+JsonObject转json jsonobject.toJsonString("数组，list，对象")
+Student stu  = new Student();
+stu.setName("张三")；stu.setAge(21);
+String stuJson = jsonObject.tojsonString(stu);
+结果为{"age":21,"name":"张三"};用键值对表示 在inqueryjob中可以查看怎么嗲用接口
+如何解析json数据：JSONObject jsonData = jsonObject.getJSONObject("data");data是json数据
+                                        String str= jsonData.getString("name")name要一一对应。 
+xml与json的区别：xml主要是文本标记。json主要是用于数据交互
+xml数据要利用Stringbuffer传递数据。拼接字符串调用apiservicre方法  apiService.send(xmlData.toString(), reportNo);
+--接口的调用在apiserviceimpl
+--具体在controller查看具体
+--TODO表示待完成的代码
+---车辆信息状态；通过，不通过，已取车。。。
+---车辆审核type(类型)：车辆二询，第二次询价，第一次询价。
+----user就是残拍商。
+
+看到carinfoserviceimpl,
+--- //判断是第几次车辆询价。（理赔员发送车辆询价给审核员审查）
+            if (carInfo.getAuditorType() == Specification.AuditorType.AGAIN.index) {
+                auditorDto.setOperatorType(Specification.AuditorType.AGAIN.name);

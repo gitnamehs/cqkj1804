@@ -1,0 +1,26 @@
+//动态代理，jdk动态代理，cglib代理
+
+ */
+        //获取动态代理类class并加载
+        Class proxyClazz = Proxy.getProxyClass(IHello.class.getClassLoader(),IHello.class);
+        //获得代理类的构造函数，并传入参数类型InvocationHandler.class
+        Constructor constructor = proxyClazz.getConstructor(InvocationHandler.class);
+        //通过构造函数来创建动态代理对象，将自定义的InvocationHandler实例传入
+        IHello iHello = (IHello) constructor.newInstance(new HWInvocationHandler(new Hello()));
+aop动态代理的启动，必须放在spring容器中。（不能放在spring-mvc容器中）
+
+jpa  java持久化（将数据写入到数据库，或者序列化到文件中）
+shiro--realm(创建toekn,subject,) 
+spring mvc ---定义controller是web层，但是spring boot里面约定controller就是web层。
+spring boot里面怎么定义拦截器：
+发送请求，后端发送数据（数据要加密），前端解密。(非对称加密)
+前端发送数据（加密），后端解密
+
+通过非对称加密方法
+发送电话号，通过公钥1，加密，后端通过私钥1解密。
+
+将要发送的数据经过公钥2加密，前端通过私钥2解密。
+
+要让前端的加密不让别人看见。
+返回的数据，不让
+一个接口里面有中国银行

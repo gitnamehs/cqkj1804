@@ -1,0 +1,54 @@
+ 1.方法的命名要规范，查询的标准selectBy..
+                     更新的标准 updateByPrimaryKeySelective
+                     删除的标准 
+		     获取相关信息 getArea().getProvince().getBidPriceById()
+		     设置标准：  example.setOrderByClause("id desc");
+                     添加的标准：insertPricById
+目录结构：dao,dto,service,serviceimpl,mapple,contrlller
+public AccessToken selectByAppId(String appid){ appid(怎么获得)
+2.创建的类，要有set，get方法。dto类里面可以用@data来注解
+		一个类(映射数据库)，对应一个类+example(放置要操作的方法，)
+             内部类相当于类的成员，如果是静态的可以通过类名来调用，或者创建对象。
+		  AreaInfoExample.Criteria criteria = example.createCriteria()--返回Criteria; 
+3.创建的dao层要用 @repository 在dao层调用mapper里面的方法。@Autowired  //private AreaInfoMapper areaInfoMapper;
+		
+4.bidPriceMapper 里面的方法 与mybatis里面的对应。
+         $ 与 # 的区别；#可以防止sql注入。给传递的参数加‘’。当传递表名的时候用$，order by ${parm}String parm='id desc'(降序排列)
+         parameterType 表示的输入的参数类型。可以是类，也可以是java.lang.long
+         SelectKey在Mybatis中是为了解决Insert数据时不支持主键自动生成的问题，他可以很随意的设置生成主键的方式。在Bidpricemapple(150行)
+         ip4，ip6
+         <sql></sql>把一些需要经常用到的东西，封装起来。
+         1.一个是对象为空（IsNull），一个是值为空（IsEmpty）
+
+5.httpMessageResult 
+       vo 展示层的数据，Dto 服务层。
+        @RequestMapping(value = "/test",method = RequestMethod.GET)
+        @getMapping()
+          <Connector port="8081" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" URIEncoding="UTF-8"/>
+        找到服务器—>conf目录下的server.xml文件，双击打开；
+	databus(分布式数据库系统)
+       
+
+6.定时任务。@schedule。（job）
+    Calendar calendar = Calendar.getInstance();设置指定时间
+    -set 表示直接设值 不考虑原来的时间值
+    -add 表示在原有的基础上进行加减value
+   
+ 
+    calendar.add(Calendar.DAY_OF_MONTH, 2);//表示在默认的当前日期上加两天
+  
+    calendar.set(Calendar.DAY_OF_MONTH,2);//表示直接将日期设置为本月2号
+
+
+7. 前台怎么接收数据@ResponseBody--返回一个json数据
+    @RequestMapping("/getAuctioneerMessage")
+
+8. inteceper(拦截器)@Resource(name = "subscribeOAuthService")
+    ISubscribeOAuthService subscribeOAuthService;
+	subscribeOAuthService;	@service（"subscribeOAuthService")）
+     @service是注解实现类，@component
+
+9.如何调用接口微信api。通过地址+参数。发送请求就可以得到json数据 将结果放在map，list进行处理
+10. authorityAnnotation(里面有管理权限，扫描注解包)

@@ -1,0 +1,92 @@
+如果一个临时表里面的字段取了别名，在外部调用的时候只能用别名点出。
+
+ aa.BJ AS "报价时间",
+ r1.CREATE_TIME AS BJ,--报价时间
+
+//不能使用aa.r1.CREATE_TIME(错误的)
+ 表名取别名不能用as 只能空格。
+//字段取别名 as 中文的别名要用“”，英文就不需要
+
+SELECT
+A.CCIC_INQUIRY_NO as "询价单号",
+A.INSURANCE_NO AS "报案号",
+A.SUBMIT_TIME AS "询价时间",
+A.DETAIL_ADDRESS AS "修理厂地址",
+A.CONTACT_PERSON AS "定损人",
+A.CONTACT_PHONE AS "定损人号码",
+A.BRAND_NAME AS "品牌名称",
+aa.BJ AS "报价时间",
+aa.SELLER_ID AS "汽配商编号",
+aa.SELLER_NAME AS "汽配商名称",
+aa.ORDER_TYPE AS "是否直供",
+aa.create_time AS "下单时间",
+bb.ccic_part_inquiry_id AS "配件标准代码",
+bb.PARTS_NAME AS "配件名称",
+bb.part_type AS "配件品质",
+bb.part_num AS "换件数量",
+bb.QUOTATION_AMOUNT AS "询价参考价",
+bb.PART_PRICE AS "汽配商报价",
+dd.ORDER_STATUS AS "订单状态",
+dd.create_time AS "交易确认时间",
+PN.AREN_NAME AS "省",
+CN.AREN_NAME AS "市",
+DN.AREN_NAME AS "区"
+FROM
+T_QUOTATION_INQUIRY A
+LEFT JOIN (
+  SELECT
+    r1.CREATE_TIME AS BJ,--报价时间
+    SELLER_ID,           --商家id
+    SELLER_NAME,         --供货商名称
+    ORDER_TYPE,
+    r2.CREATE_TIME,
+    r2.CCIC_INQUIRY_NO 
+  FROM
+    T_QUOTATION_RESULT r1
+  ,T_QUOTATION_ORDERING r2-- ON r1.CCIC_INQUIRY_NO = r2.CCIC_INQUIRY_NO 
+  ) AA ON A.CCIC_INQUIRY_NO = aa.CCIC_INQUIRY_NO
+LEFT JOIN (
+  SELECT
+    t1.CCIC_PART_INQUIRY_ID,
+    PARTS_NAME,
+    t1.PART_TYPE,
+    t1.PART_NUM,
+    QUOTATION_AMOUNT,
+    PART_PRICE,
+    CCIC_INQUIRY_NO 
+  FROM
+    T_INQUIRY_PARTS t1
+    JOIN T_ORDERING_PARTS t2 ON t1.CCIC_PART_INQUIRY_ID = t2.CCIC_PART_INQUIRY_ID 
+  ) BB ON A.CCIC_INQUIRY_NO = bb.CCIC_INQUIRY_NO
+LEFT JOIN ( 
+  SELECT 
+  ORDER_STATUS,
+  CREATE_TIME, 
+  CCIC_INQUIRY_NO 
+  FROM 
+  T_QUOTATION_DELIVERING 
+  ) dd ON A.CCIC_INQUIRY_NO = dd.CCIC_INQUIRY_NO
+	LEFT JOIN (
+	  select CCIC_INQUIRY_NO, AREN_NAME from T_AREA_INFO a join  T_QUOTATION_INQUIRY  b on a.AREA_CODE =b.PRO_NAME --省	
+	) PN ON A.CCIC_INQUIRY_NO = PN.CCIC_INQUIRY_NO
+LEFT JOIN (
+	  select CCIC_INQUIRY_NO, AREN_NAME from T_AREA_INFO a join  T_QUOTATION_INQUIRY  b on a.AREA_CODE =b.CITY_NAME --市
+	) CN ON A.CCIC_INQUIRY_NO = PN.CCIC_INQUIRY_NO
+	LEFT JOIN (
+	  select CCIC_INQUIRY_NO, AREN_NAME from T_AREA_INFO a join  T_QUOTATION_INQUIRY  b on a.AREA_CODE =b.DISTRICT--区	
+	) DN ON A.CCIC_INQUIRY_NO = PN.CCIC_INQUIRY_NO
+
+//发送小程序模板消息的注意点：格式要按照下面写：
+form_id:
+open_id: 发送给谁。
+template_id:模板id.
+string access_Token 是通过appid来获取的
+将其封装在一个对象中，利用httpclient来发送消息。
+---------------------------------------------------
+a left join b on a.id =b.id (不管on的条件是否成立，都会返回左边的数据)
+where 是先生成临时表，在进行过滤
+sql优化：1.避免全表扫描，利用where，group by(分组数据必须是，select 的数据) 
+         2.避免对字段进行数据操作，函数操作。
+多表连接：可以先将小部分的表，当作一个临时表，然后再合并
+
+

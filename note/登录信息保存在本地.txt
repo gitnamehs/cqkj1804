@@ -1,0 +1,14 @@
+ //登录信息存储缓存  LoginSessionDto//里面有uid,accessToken(相当于key)
+    public static LoadingCache<String, LoginSessionDto> LocalCache = CacheBuilder
+            .newBuilder()
+            .maximumSize(100L)
+            .expireAfterWrite(1, TimeUnit.DAYS)
+            .build(new CacheLoader<String, LoginSessionDto>() {
+                @Override
+                public LoginSessionDto load(String key) throws Exception {
+                    return null;
+                }
+            });
+
+//如何获取本地缓存。
+  LocalCache.get("uid")就可以了

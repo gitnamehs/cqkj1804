@@ -1,0 +1,86 @@
+select to_char(sysdate, 'w') from dual; --一个月中的第几周
+
+select to_char(sysdate, 'iw') from dual; --一年中的第几周
+
+Select to_char(sysdate, 'd') from dual; --一周的第几天
+
+Select to_char(sysdate, 'day') from dual; --当前日期是星期几，
+可设置显示英文还是中文
+
+select to_char(sysdate, 'ddd') 　from dual; --一年中第几天
+s
+elect to_char(sysdate,'q') from dual; --一年中第几季度
+
+to_date(将字符串变成日期)
+LocalDateTime
+//获取当前是第几周
+ Calendar calendar = Calendar.getInstance();
+        //中国人是从星期一开始
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.setTime(calendar.getTime());
+
+        System.out.println(calendar.get(Calendar.WEEK_OF_YEAR));
+//将时间作为文件的名称
+  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+
+            String path = "E:/mat/" + sdf.format(cal.getTime() )+".xlsx";
+-------------------------------------------------------------------------
+long,string,date之间
+子查询作为：字段怎么写resultmap
+cron,
+fixdate
+   con = DriverManager.getConnection("jdbc:oracle:thin:@10.1.12.32:1521:cciccs11",
+                    "wxlpbusi", "ccic0919");
+//？是当天（月）和天（星期）有一个有值时，避免冲突
+秒（0~59）
+
+分钟（0~59）
+
+小时（0~23）
+
+天（月）（0~31，需要考虑当月的天数）
+
+月（0~11）
+
+天（星期）（1~7 1为星期日 或 SUN，MON，TUE，WED，THU，FRI，SAT）
+
+年 （1970~2099）
+：
+"*" ：代表所有可能得值
+     在（月）中表示每个月，在（天）中表示一星期的每一天
+
+"/" ：代表指定数值的增量
+     0/15在（分钟）中表示从第0分钟开始，每15分钟
+
+"?" ：仅被用于天（月）和天（星期），表示不指定值
+     当这两个其中之一被指定了值之后，为了避免冲突，需要将另一个表达式的值设定为"?"
+
+"L" : 仅被用于天（月）和天（星期），是单词"Last"的缩写
+     在天（月）中表示一个月的最后一天
+     在天（星期）中表示一个星期的最后一天，也就是周六
+
+"-" ：表示一个范围
+
+"," ：表示一个列表值
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+ofInstant,
+LocalDateTime.of(设置时间)
+ System.out.println(LocalDateTime.now());
+        LocalDateTime localDateTime =LocalDateTime.now();
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        //data变成String
+        System.out.println(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        //String变成data
+        LocalDateTime  local =LocalDateTime.parse("2019-06-17 12:23:05",df);
+        System.out.println(local);
+ 	 //东八区获取秒数
+        long time =LocalDateTime.now().toInstant(ZoneOffset.of("+8")).getEpochSecond();
+        System.out.println(time);
+        System.out.println(System.currentTimeMillis());
+        //获取毫秒数
+        Long milliSecond = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        System.out.println(milliSecond);
+--------------------------------------------------------------------------------------------------------------------------------

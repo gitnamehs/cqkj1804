@@ -1,0 +1,11 @@
+1.  String api = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+sysConfigService.getByKey("appId").getSysValue()+"&secret="+sysConfigService.getByKey("secret").getSysValue()+"&code="+code+"&grant_type=authorization_code";
+        String result = restTemplate.getForObject(api,String.class);
+        Map resultMap = JSON.parseObject(result,Map.class);
+        // {"access_token":"rfnhC3rjwtRGokpr3L4OiW_TamRJ6VtjqtUwUevxRV_njBPDq8EG5X9wZzlgbXY1rVJ4VxE99M1RQqVOdbuCcDOeyY_xgVjFR93XsDY1G5s","expires_in":7200,"refresh_token":"UbG4GJ9Tu3y1L-4bWaafZb9S73oomodRn4a_AwsXXJeFMyTgfi6uED4e4AQf4tOtNjD1W44_xEJjnKHPlnU6k1D5V581TDU2EHrggsqQVXI","openid":"oDa3-1bJpGIWdWXpP32eJGib5q9c","scope":"snsapi_userinfo"}
+        log.info("retmap : " + result);
+        return resultMap;
+
+2.获取用户信息
+    String api = "https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId+"&lang=zh_CN";
+   json.toString()//将json数据变成字符串
+   Map resultMap = JSON.parseObject(result,Map.class);//可以将字符串变成Object

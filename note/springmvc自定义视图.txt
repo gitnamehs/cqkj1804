@@ -1,0 +1,22 @@
+//添加视图的两种方法。
+1. @Requestmaping("/login")
+   public String login()
+    {
+        return "login";
+    }
+
+2.利用webmvcAdater里面的addViewController添加
+     @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/toview").setViewName("/view");
+        //添加更多
+    }
+
+3.登录的时候，提交表单如何防止重复提交：利用重定向 return “redirect:/路径--/toview”--结果就重定向到view.jsp页面
+
+4.利用session来保存一下数据，作为校验数据。
+    request.getSeeion().setAttribute();
+    request.getSession().getAttribute();
+
+
+5.利用model,modelMap,map将数据返回给页面

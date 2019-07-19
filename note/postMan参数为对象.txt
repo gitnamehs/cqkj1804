@@ -1,0 +1,13 @@
+1,在controller层写一个方法，必须利用注解@RequstBody将json数据进行解析。
+     @RequestMapping("/getInfo")
+    @ResponseBody
+    public String getInfo(@RequestBody User user)
+    {
+        //@RequestBody将json数据进行转换，@responseBody将数据以json格式返回
+       String str = user.getUserName();
+        String password = user.getPassword();
+        return str+password;
+    }
+
+2.在postman中选中body，选择json/application
+输入json数据{"userName":"hs","password":"123"}

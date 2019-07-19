@@ -1,0 +1,6 @@
+1，如果子查询的表是大表，用exists效率高，如果一样大两者没有区别
+
+exists是loop 循环连接，
+in 是 hash join 散列连接
+select * from a where exists (selet id from b where b.id =a,id)//b 表大
+select * from a where id in(select id from b)//b 表小。

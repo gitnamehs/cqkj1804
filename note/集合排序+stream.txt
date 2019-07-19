@@ -1,0 +1,55 @@
+ //利用lambda表达式加stream来排序
+        List <ClaimStatusInquiryViewDto> inquiryViewDtoList = inquiryViewDtos.stream().sorted((base1, base2) -> base2.getBaseInfo().getReportTime().compareTo(base1.getBaseInfo().getReportTime())).collect(Collectors.toList());
+
+    List <TaskDto> task = taskDtoList.stream().sorted(Comparator.comparing(TaskDto::getSubmitTime).reversed()).collect(Collectors.toList());
+
+//查询语句的条件可以连续点出
+ TaskExample example = new TaskExample();
+        example.createCriteria().andInquiryNoEqualTo(inquiryNo).andValidStatusNotEqualTo(1L);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+stream详解：filter(过滤)，map(设置值)，limit(获取多少条)，reduce
+//过滤集合中大于6的数据
+ ls.stream().sorted().filter(a->a>6).limit(2).forEach(System.out::println);
+//获取集合中最小的数据，integer::min，，注意前面一定要写max
+        Integer reduce = ls.stream().reduce(Integer.MAX_VALUE, Integer::min);
+
+//获取有一个集合里面的值，并且add到另外一个集合中。
+ map(Transaction::getId).collect(toList());
+//1.7以前是先遍历集合，在利用add方法添加进去
+List<Integer> transactionsIds = transactions.parallelStream().
+
+ filter(t -> t.getType() == Transaction.GROCERY).
+
+ sorted(comparing(Transaction::getValue).reversed()).
+
+ map(Transaction::getId).
+
+ collect(toList());
+----------------------------------------------------------------------------------------------------------------------------------------------
+example.or()
+.andField5In(field5Values);
+
+example.or()
+.andField6Between(3, 7);
+
+//or是或的关系
+where (field5 in (8, 11, 14, 22))
+or (field6 between 3 and 7)
+
+//example里面的and与or之间的关系
+ example.createCriteria().andInquiryNoEqualTo(inquiryNo).andValidStatusNotEqualTo(1L);
+        TaskExample.Criteria criteria = example.createCriteria();
+        criteria.andTaskStatusEqualTo( 3L).andCcicInquiryNoEqualTo("265413");
+        example.or(criteria);
+----------------------------------------------------
+获取枚举类型的描述值：
+Todo(1)
+private long text
+用一个构造方法（TaskStatus(long text)）
+TaskStatus.todo.getText();
+
+------------------------------------------
+利用generator自动生成 点击edit configuration 找到maven 输入mybatis-generator:generate -e就可以。
+要通过某个条件查询，可以使用selectByexample（设置条件就可以）
+---------------------------------------------------------------------------------
+join on 的条件join WXLPBUSI.T_AREA_INFO ai ON ai.AREA_CODE = i.PRO_NAME or ai.AREA_CODE = i.CITY_NAME or ai.AREA_CODE = i.DISTRICT

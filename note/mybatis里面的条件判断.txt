@@ -1,0 +1,39 @@
+1.if
+    where 1=1
+  <if test="user!=null">
+     and
+
+  </if>
+
+2.choose/when/otherwise//不想用到所有的条件。根据传递的参数。来决定。
+   <choose>
+    <when test="uname!=null and uname!=''">
+        and user=#{user}
+     </when>
+
+  </choose>
+
+3.<trim prefix="values (" suffix=")" suffixOverrides="," >
+利用trim可以设置前缀，后缀，suffixOverrides去除最后的逗号
+4.<where>
+    <if></if>//如果都不满足会去除第一个and,or
+</where>
+5.set，用于uodate语句中。
+6.foreach 如果传递集合 collection="list" ,如果是集合 collection="array".---没加注解
+
+  如果加了注解//public String get(@Param("isd")List<String> isd) collecion="isd"
+  当传入是Map时，集合在Map中，collection属性值为键值
+   List<String> list =new ArrayList();
+   map.put("lst",list)
+ ????select * from t_blog where id in
+?????
+??<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+??????????????
+	?#{item}???????
+??????
+?</foreach>???
+
+7.<bind  name="userName" value="C_NAME+'%'">name是传递参数的名字，value里面是用和数据库字段名
+  c_Nmae like #{userName}
+模糊查询?
+ AND bl.C_NAME LIKE '%' || #{branchName,jdbcType=VARCHAR} || '%'

@@ -1,0 +1,72 @@
+spring data jpa (规范)对 jpa进行了封装，jpa又对hiberate进行了封装，hibereate又对jdbc进行了封装。
+
+  如果要使用jpa的话，需要创建一个接口，继承 两个接口（jpa）//利用知道的api进行sql语句的编写
+  save(既可以update,insert,,取决去id)
+findone(),,,findall()
+
+@Repository//放入容器中
+public interface UserTokenRepository extends JpaSpecificationExecutor<UserToken>,JpaRepository<UserToken,String> {//这里面的String 表示主键的类型
+
+    //UserToken 是映射表的实体类
+    @Query("FROM UserToken u WHERE u.userId = :unionId")
+    public List<UserToken> getByUserId(@Param("unionId")String unionId);//通过unionid查询结果
+
+ 2 insert方法。如果参数是一个对象，如果要获取对象里面的某个值（#{userToken.id}）
+    	@Modifying //@Modifying注解
+　　　　1、在@Query注解中编写JPQL实现DELETE和UPDATE操作的时候必须加上@modifying注解，以通知Spring Data 这是一个DELETE或UPDATE操作。
+	nativeQuery = true这是使用原生sql语句来编写
+
+    @Query(value = "insert into T_USER_TOKEN(ID,USER_ID,TOKEN,USER_TYPE,CREATE_TIME,UPDATE_TIME,EXPIRE_TIME)" +
+            " values(#{userToken.id},#{userToken.userId},#{userToken.token},#{userToken.userType},#{userToken.createTime}," +
+            "#{userToken.updateTime},#{userToken.expireTime})",nativeQuery = true)
+    public void saves (@Param("userToken")UserToken userToken);
+   
+
+3 @Modifying
+    @Query(value = "update T_USER_TOKEN set TOKEN=:#{userToken.token} ,UPDATE_TIME=:#{userToken.updateTime}," +
+            "EXPIRE_TIME=:#{userToken.expireTime} where id=:#{userToken.id}",nativeQuery = true)
+    public void update (@Param("userToken")UserToken userToken);
+
+
+}
+ @Id// 表示主键（利用uuid生成，不重复的）
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @Column(name = "ID")
+
+
+//save既可以更新，有又可以插入
+----------------------------------------------------------------------------------
+更加方便快捷的使用jpa来写sql语句前提条件就是必须创建实体类与表相对应
+@Resource
+    private UserTokenRepository userTokenRepository;//这个类继承jpa里面的东西
+
+    @Override
+    public void save(UserToken userToken) {
+        userTokenRepository.save(userToken);
+    }
+
+    @Override
+    public UserToken findOneByUnionId(final String unionId) {
+//利用repository里面的findOne(里面的api)
+        Specification<UserToken> specification = new Specification<UserToken>() {
+            @Override
+            public Predicate toPredicate(Root<UserToken> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+               //当只有一个参数时，就不能写 predicates 
+                List<Predicate> predicates = new ArrayList<Predicate>();
+                predicates.add(cb.equal(root.get("userId"), unionId));//这个相当于参数。不能写sql语句了
+                predicates.add(cb.equal(root.get("userType"), "1"));
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));//cb.like(写模糊查询)
+            }//表示and语句
+        };
+        UserToken userToken = userTokenRepository.findOne(specification);
+        return userToken;
+    }
+///////////////////////////只有一个查询条件，equals相当于where week=${week}
+   public Predicate toPredicate(Root<PersonnelList> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                return cb.equal(root.get("week"), week);
+            }
+//    String url = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=" + accessToken;发送模板消息
+//    String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + secret + "&js_code=" + jsCode + "&grant_type=authorization_code";//获取appid,secret
+发送模板消息（通过传入的参数，封装到模板参数对象里面）//formid(表单id),openid(发送给谁)
+//首先获取accessToken(通过appid) ，放进url里面。模板id,formid，userid(openid)//not null enable(激活约束)

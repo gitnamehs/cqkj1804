@@ -1,0 +1,13 @@
+@postConstruct
+  给对象初始化，因为是依赖注入，无法通过构造方法来完成
+  在依赖注入完成之后，自动调用。
+ 
+@Autowired
+private ExcelReport excelReport
+
+@postconstruct 非静态的无返回值的方法
+
+ public void print()
+{
+
+}

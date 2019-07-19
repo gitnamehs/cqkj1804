@@ -1,0 +1,9 @@
+1.BeanUtil.hasNullField(Object object)
+//对象里面的字段都不能为空。
+
+2.//objectUtil.isEmpty(object object)
+//对象不能为空，但是里面的一些字段可以为空
+
+3.//使用google 的guava里面包含了很多方法，对原生jdk的扩展
+
+4.guava里面对字符串进行操作：trim(去除空格，只能去除前面，后面。不能去除中间的空格)。

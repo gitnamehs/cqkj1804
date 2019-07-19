@@ -1,0 +1,62 @@
+1.redis+消息队列。
+2.消息队列主要是处理一些异步操作。同步（即使操作不放入），
+   eg:大量用户注册，会发注册成功邮件。由于接下的操作跟收没收到没有联系，所以就放入队列中。
+
+阻塞：在同步方法中（发送请求，必须接收到值的时候，才会进行下一步。）
+      在多线程中（相当于异步请求）锁很重要。
+
+分布式：将任务分解.便于维护，解耦合
+集群：负载均衡：分担客户端发送的请求压力。。
+
+
+//spring 事务管理：利用注解，或者bean来 @TransCational
+
+//left join 的效率比join的效率低。
+join 是以小表为驱动表，
+left join 是默认以大表为驱动表
+status变成1.
+首先获取unnid,然后再生产token. 将它插入数据库中，下次访问，将appid,与token好啦干净，在domain,里面写一个Dao方法，查询token
+//先查找是否有unnionid
+
+@Query("update HsAlbum album set album.albumName = #{#hsAlbum.albumName} ,album.description = #{#hsAlbum.description } ")
+public int update(HsAlbum hsAlbum);
+
+request.setAttribute("ctx", request.getContextPath());
+//		log.info("ContextPath:" + request.getContextPath());
+//		String realm = BaseConfig.getProperty("application.realm");
+//		CookieUtils.COOKIE_DOMAIN = BaseConfig.getProperty("cookie.domain");
+//		//访问根路径
+//		String root = realm + request.getRequestURI();
+//		//jsapi 签名路径包含参数
+//		String signatureUrl = root;
+//		String param_str = request.getQueryString();
+//		if (param_str != null) 
+//			signatureUrl += "?" + param_str;
+//		}
+//		request.setAttribute("signaturePath", signatureUrl);
+//
+//		log.info("当前请求url:{}", signatureUrl);
+//		return authorization(request, response, signatureUrl);
+
+
+userid..//unionid就是userid
+, nativeQuery = true//使用时select * from 表
+{netstat –ano?可以查看所有进程
+
+netstat –ano|findstr [指定端口号]?
+
+示例：netstat -ano|findstr 8080
+
+示例：taskkill /F /PID 748
+
+2、使用命令根据名称杀死进程
+1>首先找到进程号对应的进程名称
+tasklist|findstr [进程号]；如：tasklist|findstr 748
+
+2>然后根据进程名称杀死进程
+taskkill /f /t /im [进程名称]；如：taskkill /f /t /im javaw.exe
+--------------------- 
+作者：MyXieZhiXin 
+来源：CSDN 
+原文：https://blog.csdn.net/lihua5419/article/details/88893885 
+版权声明：本文为博主原创文章，转载请附上博文链接！
